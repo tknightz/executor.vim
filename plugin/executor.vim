@@ -1,13 +1,21 @@
-let g:ExecuteSupportedLang = {
+if exists('g:executor_loaded')
+    finish
+endif
+
+let g:executor_loaded = 1
+
+
+let g:ExecutorSupportedLang = {
       \'cpp': 's:CppExecutor',
       \'python': 's:PyExecutor',
       \'javascript': 's:NodeExecutor'
+      \'go': 's:GoExecutor'
       \}
 
-function! SupportedLang()
-  if has_key(g:ExecuteSupportedLang, &ft)
+function! GetCommand()
+  if has_key(g:ExecutorSupportedLang, &ft)
     let g:compile_mode = 1
-    let ExecutorRef = function(g:ExecuteSupportedLang[&ft])
+    let ExecutorRef = function(g:ExecutorSupportedLang[&ft])
     let command = ExecutorRef()
     return command
   endif
@@ -33,8 +41,14 @@ function! s:NodeExecutor() abort
   return command
 endfunction
 
+function! s:GoExecutor() abort
+  let inputfile = expand('%:p')
+  let command = "go run ".inputfile
+  return command
+endfunction
+
 function! Execute() abort
-  let command = SupportedLang()
+  let command = GetCommand()
   if command == -1
     echo &ft." is not supported!"
     return
