@@ -8,7 +8,7 @@ let g:executor_loaded = 1
 let g:ExecutorSupportedLang = {
       \'cpp': 's:CppExecutor',
       \'python': 's:PyExecutor',
-      \'javascript': 's:NodeExecutor'
+      \'javascript': 's:NodeExecutor',
       \'go': 's:GoExecutor'
       \}
 
