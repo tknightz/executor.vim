@@ -23,26 +23,26 @@ function! GetCommand()
 endfunction
 
 function! s:CppExecutor() abort
-  let inputfile = expand('%:p')
-  let outputfile = expand('%:p:r')
-  let command = "g++ ".inputfile." -o ".outputfile." && ".outputfile
+  let inputfile = expand('%:t')
+  let outputfile = expand('%:t:r')
+  let command = "g++ ".inputfile." -o ".outputfile." && ./".outputfile
   return command
 endfunction
 
 function! s:PyExecutor() abort
-  let inputfile = expand('%:p')
+  let inputfile = expand('%:t')
   let command = "python ".inputfile
   return command
 endfunction
 
 function! s:NodeExecutor() abort
-  let inputfile = expand('%:p')
+  let inputfile = expand('%:t')
   let command = "node ".inputfile
   return command
 endfunction
 
 function! s:GoExecutor() abort
-  let inputfile = expand('%:p')
+  let inputfile = expand('%:t')
   let command = "go run ".inputfile
   return command
 endfunction
@@ -53,6 +53,8 @@ function! Execute() abort
     echo &ft." is not supported!"
     return
   endif
+  let path = expand('%:p:h')
+  let command = "cd ".path." && ".command
   if has('nvim')
     exec "15Term ".command
   else
