@@ -56,7 +56,14 @@ function! Execute() abort
   let path = expand('%:p:h')
   let command = "cd ".path." && ".command
   if has('nvim')
+    if exists('g:executor_bufnr') && buffer_exists(g:executor_bufnr)
+      exec "bd! ".g:executor_bufnr
+    endif
     exec "15Term ".command
+    let g:executor_bufnr = bufnr()
+    let g:executor_winnr = winnr()
+    let g:executor_winid = win_getid()
+    stopinsert
   else
     exec "term ".command
   endif
